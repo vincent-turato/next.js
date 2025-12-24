@@ -49,10 +49,42 @@ describe('TypeScript App Type Declarations', () => {
     const appPort = await findPort()
     let app
     try {
-      app = await launchApp(appDir, appPort, {})
+      app = await launchApp(appDir, appPort, {
+        env: {
+          __NEXT_EXPERIMENTAL_STRICT_ROUTE_TYPES: '',
+        },
+      })
       const stat = await fs.stat(appTypeDeclarations)
       expect(stat.mtime).toEqual(prevStat.mtime)
     } finally {
+      await killApp(app)
+    }
+  })
+
+  it('should not touch an existing correct next-env.d.ts with strictRouteTypes', async () => {
+    const appTypeDeclarationsStrictRouteTypes = join(
+      appDir,
+      'next-env.strictRouteTypes.d.ts'
+    )
+    await fs.rename(appTypeDeclarations, join(appTypeDeclarations, '.bak'))
+    await fs.copyFile(
+      appTypeDeclarationsStrictRouteTypes,
+      appTypeDeclarations
+    )
+
+    const prevStat = await fs.stat(appTypeDeclarations)
+    const appPort = await findPort()
+    let app
+    try {
+      app = await launchApp(appDir, appPort, {
+        env: {
+          __NEXT_EXPERIMENTAL_STRICT_ROUTE_TYPES: 'true',
+        },
+      })
+      const stat = await fs.stat(appTypeDeclarations)
+      expect(stat.mtime).toEqual(prevStat.mtime)
+    } finally {
+      await fs.rename(join(appTypeDeclarations, '.bak'), appTypeDeclarations)
       await killApp(app)
     }
   })
