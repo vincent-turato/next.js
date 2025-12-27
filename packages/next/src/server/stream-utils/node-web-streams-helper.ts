@@ -650,7 +650,10 @@ const CLOSE_TAG = '</body></html>'
  * like `</body></html><script>...</script>` will be transformed to
  * `<script>...</script></body></html>`.
  */
-function createMoveSuffixStream(): TransformStream<Uint8Array, Uint8Array> {
+export function createMoveSuffixStream(): TransformStream<
+  Uint8Array,
+  Uint8Array
+> {
   let foundSuffix = false
 
   return new TransformStream({

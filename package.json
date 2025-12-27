@@ -13,6 +13,7 @@
     "lerna": "lerna",
     "dev": "turbo run dev --parallel --filter=\"!@next/bundle-analyzer-ui\"",
     "pack-next": "tsx scripts/pack-next.ts",
+    "test-bug": "pnpm test -- packages/next/src/server/stream-utils/node-web-streams-helper.test.ts",
     "test-types": "tsc",
     "test-unit": "jest test/unit/ packages/next/ packages/font",
     "test-dev-inner": "cross-env NEXT_TEST_MODE=dev pnpm testheadless",
